@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { usePUUIDByRiotId } from "../hooks/queryHooks";
+import { usePUUIDByRiotId, useSummonerByPUUID } from "../hooks/queryHooks";
 
 function Home() {
   const [name, setName] = useState("");
@@ -7,16 +7,28 @@ function Home() {
   const [submittedName, setSubmittedName] = useState("");
   const [submittedTag, setSubmittedTag] = useState("");
 
-  const { data, error, isLoading } = usePUUIDByRiotId(
-    submittedName,
-    submittedTag
-  );
+  const PuuidQuery = usePUUIDByRiotId(submittedName, submittedTag);
+
+  const puuid = PuuidQuery.data?.puuid;
+
+  const {
+    data: summonerData,
+    error: summonerError,
+    isLoading: summonerIsLoading,
+  } = useSummonerByPUUID(puuid);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmittedName(name);
-    setSubmittedTag(tag);
+    setSubmittedName(name.trim());
+    setSubmittedTag(tag.trim());
+    setName("");
+    setTag("");
   };
+
+  console.log(summonerData);
+  console.log(summonerError);
+  console.log(summonerIsLoading);
+  console.log(summonerData.summonerLevel);
 
   return (
     <div>
@@ -28,19 +40,31 @@ function Home() {
         />
         <input
           value={tag}
-          placeholder="Name"
+          placeholder="Tag"
           onChange={(e) => setTag(e.target.value)}
         />
         <button type="submit">Submit</button>
       </form>
 
-      {isLoading && <p>Loading PUUID...</p>}
-      {error && <p>Error:{(error as Error).message}</p>}
-      {data && <p>PUUID: {data.puuid}</p>}
+      {PuuidQuery.isLoading && <p>Loading PUUID...</p>}
+      {PuuidQuery.error && <p>Error:{(PuuidQuery.error as Error).message}</p>}
+      {PuuidQuery.data && <p>PUUID: {puuid}</p>}
 
-      <p>
-        Submitted RiotID: {submittedName}#{submittedTag}
-      </p>
+      {summonerData && (
+        <div>
+          <img
+            src={`http://ddragon.leagueoflegends.com/cdn/15.13.1/img/profileicon/${summonerData.profileIconId}.png`}
+            width={150}
+            height={150}
+          />
+          <p>
+            Riot ID: {submittedName}#{submittedTag}
+          </p>
+          <p>Summoner Level: {summonerData.summonerLevel}</p>
+        </div>
+      )}
+      {summonerError && <p> Error:{(summonerError as Error).message}</p>}
+      {summonerIsLoading && <p> Loading Summoner...</p>}
     </div>
   );
 }
