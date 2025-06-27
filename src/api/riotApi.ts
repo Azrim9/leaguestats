@@ -1,4 +1,4 @@
-const API_KEY = "RGAPI-8c547be8-83c4-4415-b25c-577d47c95b8f";
+const API_KEY = "RGAPI-464999f5-eb15-4cc5-9bf9-65cc41db568b";
 
 export async function fetchPUUIDByRiotId(gameName: string, tagLine: string) {
   const res = await fetch(
@@ -35,5 +35,22 @@ export async function fetchSummonerByPUUID(puuid: string) {
     throw new Error("Failed to fetch summoner data");
   }
 
+  return res.json();
+}
+
+export async function fetchSummonerStatsByPUUID(puuid: string) {
+  const res = await fetch(
+    `https://na1.api.riotgames.com/lol/league/v4/entries/by-puuid/${encodeURIComponent(
+      puuid
+    )}`,
+    {
+      headers: {
+        "X-Riot-Token": API_KEY,
+      },
+    }
+  );
+  if (!res.ok) {
+    throw new Error("Failed to fetch summoner stats");
+  }
   return res.json();
 }
