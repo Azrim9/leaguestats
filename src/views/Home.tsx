@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { usePUUIDByRiotId, useSummonerByPUUID } from "../hooks/queryHooks";
+import {
+  usePUUIDByRiotId,
+  useSummonerByPUUID,
+  useSummonerStatsByPUUID,
+} from "../hooks/queryHooks";
 
 function Home() {
   const [name, setName] = useState("");
@@ -11,6 +15,17 @@ function Home() {
 
   const puuid = PuuidQuery.data?.puuid;
 
+  const {
+    data: summonerStats,
+    error: summonerStatsError,
+    isLoading: summonerStatsIsLoading,
+  } = useSummonerStatsByPUUID(puuid);
+
+  const soloQueueStats = summonerStats?.find(
+    (entry) => entry.queueType === "RANKED_SOLO_5x5"
+  );
+
+  console.log(summonerStats);
   const {
     data: summonerData,
     error: summonerError,
@@ -24,11 +39,6 @@ function Home() {
     setName("");
     setTag("");
   };
-
-  console.log(summonerData);
-  console.log(summonerError);
-  console.log(summonerIsLoading);
-  console.log(summonerData.summonerLevel);
 
   return (
     <div>
@@ -61,6 +71,15 @@ function Home() {
             Riot ID: {submittedName}#{submittedTag}
           </p>
           <p>Summoner Level: {summonerData.summonerLevel}</p>
+
+          {soloQueueStats ? (
+            <p>
+              Solo/Duo Rank: {soloQueueStats?.tier}{" "}
+              {soloQueueStats?.leaguePoints} LP
+            </p>
+          ) : (
+            "Unranked"
+          )}
         </div>
       )}
       {summonerError && <p> Error:{(summonerError as Error).message}</p>}

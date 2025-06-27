@@ -1,5 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchPUUIDByRiotId, fetchSummonerByPUUID } from "../api/riotApi";
+import {
+  fetchPUUIDByRiotId,
+  fetchSummonerByPUUID,
+  fetchSummonerStatsByPUUID,
+} from "../api/riotApi";
 
 export function usePUUIDByRiotId(gameName: string, tagLine: string) {
   return useQuery({
@@ -13,6 +17,14 @@ export function useSummonerByPUUID(puuid: string) {
   return useQuery({
     queryKey: ["summonerByPUUID", puuid],
     queryFn: () => fetchSummonerByPUUID(puuid),
+    enabled: Boolean(puuid),
+  });
+}
+
+export function useSummonerStatsByPUUID(puuid: string) {
+  return useQuery({
+    queryKey: ["summonerStatsByPUUID", puuid],
+    queryFn: () => fetchSummonerStatsByPUUID(puuid),
     enabled: Boolean(puuid),
   });
 }
