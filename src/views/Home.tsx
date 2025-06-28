@@ -4,6 +4,7 @@ import {
   useSummonerByPUUID,
   useSummonerStatsByPUUID,
 } from "../hooks/queryHooks";
+import SummonerProfile from "../components/SummonerProfile";
 
 function Home() {
   const [name, setName] = useState("");
@@ -25,7 +26,10 @@ function Home() {
     (entry) => entry.queueType === "RANKED_SOLO_5x5"
   );
 
-  console.log(summonerStats);
+  const flexQueueStats = summonerStats?.find(
+    (entry) => entry.queueType === "RANKED_FLEX_SR"
+  );
+
   const {
     data: summonerData,
     error: summonerError,
@@ -56,32 +60,20 @@ function Home() {
         <button type="submit">Submit</button>
       </form>
 
+      {summonerData && (
+        <SummonerProfile
+          submittedName={submittedName}
+          submittedTag={submittedTag}
+          soloQueueStats={soloQueueStats}
+          flexQueueStats={flexQueueStats}
+          summonerData={summonerData}
+        />
+      )}
+
       {PuuidQuery.isLoading && <p>Loading PUUID...</p>}
       {PuuidQuery.error && <p>Error:{(PuuidQuery.error as Error).message}</p>}
       {PuuidQuery.data && <p>PUUID: {puuid}</p>}
 
-      {summonerData && (
-        <div>
-          <img
-            src={`http://ddragon.leagueoflegends.com/cdn/15.13.1/img/profileicon/${summonerData.profileIconId}.png`}
-            width={150}
-            height={150}
-          />
-          <p>
-            Riot ID: {submittedName}#{submittedTag}
-          </p>
-          <p>Summoner Level: {summonerData.summonerLevel}</p>
-
-          {soloQueueStats ? (
-            <p>
-              Solo/Duo Rank: {soloQueueStats?.tier}{" "}
-              {soloQueueStats?.leaguePoints} LP
-            </p>
-          ) : (
-            "Unranked"
-          )}
-        </div>
-      )}
       {summonerError && <p> Error:{(summonerError as Error).message}</p>}
       {summonerIsLoading && <p> Loading Summoner...</p>}
     </div>

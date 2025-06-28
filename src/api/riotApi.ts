@@ -1,4 +1,4 @@
-const API_KEY = "RGAPI-464999f5-eb15-4cc5-9bf9-65cc41db568b";
+const API_KEY = "RGAPI-10f77ff0-56bb-4da8-afaf-5ce35dab9f42";
 
 export async function fetchPUUIDByRiotId(gameName: string, tagLine: string) {
   const res = await fetch(
