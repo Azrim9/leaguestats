@@ -1,4 +1,4 @@
-const API_KEY = "RGAPI-10f77ff0-56bb-4da8-afaf-5ce35dab9f42";
+const API_KEY = import.meta.env.VITE_RIOT_API_KEY;
 
 export async function fetchPUUIDByRiotId(gameName: string, tagLine: string) {
   const res = await fetch(
