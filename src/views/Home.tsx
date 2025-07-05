@@ -13,8 +13,13 @@ function Home() {
   const [submittedTag, setSubmittedTag] = useState("");
 
   const PuuidQuery = usePUUIDByRiotId(submittedName, submittedTag);
-
   const puuid = PuuidQuery.data?.puuid;
+
+  const {
+    data: summonerData,
+    error: summonerError,
+    isLoading: summonerIsLoading,
+  } = useSummonerByPUUID(puuid);
 
   const {
     data: summonerStats,
@@ -30,12 +35,6 @@ function Home() {
     (entry) => entry.queueType === "RANKED_FLEX_SR"
   );
 
-  const {
-    data: summonerData,
-    error: summonerError,
-    isLoading: summonerIsLoading,
-  } = useSummonerByPUUID(puuid);
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmittedName(name.trim());
@@ -43,6 +42,9 @@ function Home() {
     setName("");
     setTag("");
   };
+
+  console.log(summonerStats);
+  console.log(summonerData);
 
   return (
     <div>
@@ -62,11 +64,11 @@ function Home() {
 
       {summonerData && (
         <SummonerProfile
+          summonerData={summonerData}
           submittedName={submittedName}
           submittedTag={submittedTag}
           soloQueueStats={soloQueueStats}
           flexQueueStats={flexQueueStats}
-          summonerData={summonerData}
         />
       )}
 

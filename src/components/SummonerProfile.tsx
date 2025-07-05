@@ -1,15 +1,27 @@
+type QueueStats = {
+  queueType: string;
+  tier: string;
+  rank: string;
+  leaguePoints: number;
+  wins: number;
+  losses: number;
+};
+
 type SummonerProfileProps = {
+  summonerData: {
+    profileIconId: number;
+    summonerLevel: number;
+  };
   submittedName: string;
   submittedTag: string;
-  summonerData: any;
-  soloQueueStats?: any;
-  flexQueueStats?: any;
+  soloQueueStats?: QueueStats;
+  flexQueueStats?: QueueStats;
 };
 
 function SummonerProfile({
   summonerData,
-  submittedTag,
   submittedName,
+  submittedTag,
   soloQueueStats,
   flexQueueStats,
 }: SummonerProfileProps) {
