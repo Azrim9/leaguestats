@@ -1,22 +1,4 @@
-type QueueStats = {
-  queueType: string;
-  tier: string;
-  rank: string;
-  leaguePoints: number;
-  wins: number;
-  losses: number;
-};
-
-type SummonerProfileProps = {
-  summonerData: {
-    profileIconId: number;
-    summonerLevel: number;
-  };
-  submittedName: string;
-  submittedTag: string;
-  soloQueueStats?: QueueStats;
-  flexQueueStats?: QueueStats;
-};
+import type { SummonerProfileProps } from "../types/summoner";
 
 function SummonerProfile({
   summonerData,
