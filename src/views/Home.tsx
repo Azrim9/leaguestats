@@ -5,6 +5,7 @@ import {
   useSummonerStatsByPUUID,
 } from "../hooks/queryHooks";
 import SummonerProfile from "../components/SummonerProfile";
+import RiotIdSearchForm from "../components/RiotIdSearchForm";
 
 function Home() {
   const [name, setName] = useState("");
@@ -43,25 +44,15 @@ function Home() {
     setTag("");
   };
 
-  console.log(summonerStats);
-  console.log(summonerData);
-
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <input
-          value={name}
-          placeholder="Name"
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          value={tag}
-          placeholder="Tag"
-          onChange={(e) => setTag(e.target.value)}
-        />
-        <button type="submit">Submit</button>
-      </form>
-
+      <RiotIdSearchForm
+        handleSubmit={handleSubmit}
+        name={name}
+        tag={tag}
+        onNameChange={(e) => setName(e.target.value)}
+        onTagChange={(e) => setTag(e.target.value)}
+      />
       {summonerData && (
         <SummonerProfile
           summonerData={summonerData}
