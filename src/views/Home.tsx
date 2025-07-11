@@ -6,6 +6,8 @@ import {
 } from "../hooks/queryHooks";
 import SummonerProfile from "../components/SummonerProfile";
 import RiotIdSearchForm from "../components/RiotIdSearchForm";
+import Loading from "../components/Loading";
+import ErrorMessage from "../components/ErrorMessage";
 
 function Home() {
   const [name, setName] = useState("");
@@ -44,15 +46,19 @@ function Home() {
     setTag("");
   };
 
+  console.log(summonerStats);
+  console.log(summonerData);
+
   return (
     <div>
       <RiotIdSearchForm
-        handleSubmit={handleSubmit}
         name={name}
         tag={tag}
+        handleSubmit={handleSubmit}
         onNameChange={(e) => setName(e.target.value)}
         onTagChange={(e) => setTag(e.target.value)}
       />
+
       {summonerData && (
         <SummonerProfile
           summonerData={summonerData}
@@ -63,12 +69,12 @@ function Home() {
         />
       )}
 
-      {PuuidQuery.isLoading && <p>Loading PUUID...</p>}
-      {PuuidQuery.error && <p>Error:{(PuuidQuery.error as Error).message}</p>}
+      {PuuidQuery.isLoading && <Loading message="Loading PUUID..." />}
+      {PuuidQuery.error && <ErrorMessage error={PuuidQuery.error} />}
       {PuuidQuery.data && <p>PUUID: {puuid}</p>}
 
+      {summonerIsLoading && <Loading message="Loading Summoner..." />}
       {summonerError && <p> Error:{(summonerError as Error).message}</p>}
-      {summonerIsLoading && <p> Loading Summoner...</p>}
     </div>
   );
 }
