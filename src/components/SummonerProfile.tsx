@@ -16,6 +16,7 @@ type SummonerProfileProps = {
   submittedTag: string;
   soloQueueStats?: QueueStats;
   flexQueueStats?: QueueStats;
+  puuid?: string;
 };
 
 function SummonerProfile({
@@ -24,9 +25,10 @@ function SummonerProfile({
   submittedTag,
   soloQueueStats,
   flexQueueStats,
+  puuid,
 }: SummonerProfileProps) {
   return (
-    <div>
+    <div className="min-h-screen bg-gray-100">
       <img
         src={`http://ddragon.leagueoflegends.com/cdn/15.13.1/img/profileicon/${summonerData.profileIconId}.png`}
         width={150}
@@ -54,6 +56,7 @@ function SummonerProfile({
       ) : (
         "Flex Queue: UNRANKED"
       )}
+      {puuid && <p>PUUID: {puuid}</p>}
     </div>
   );
 }

@@ -14,7 +14,7 @@ function RiotIdSearchForm({
   onTagChange,
 }: Form) {
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-2">
       <input value={name} placeholder="Name" onChange={onNameChange} />
       <input value={tag} placeholder="Tag" onChange={onTagChange} />
       <button type="submit">Submit</button>
