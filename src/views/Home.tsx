@@ -50,31 +50,32 @@ function Home() {
   console.log(summonerData);
 
   return (
-    <div>
-      <RiotIdSearchForm
-        name={name}
-        tag={tag}
-        handleSubmit={handleSubmit}
-        onNameChange={(e) => setName(e.target.value)}
-        onTagChange={(e) => setTag(e.target.value)}
-      />
-
-      {summonerData && (
-        <SummonerProfile
-          summonerData={summonerData}
-          submittedName={submittedName}
-          submittedTag={submittedTag}
-          soloQueueStats={soloQueueStats}
-          flexQueueStats={flexQueueStats}
+    <div className="min-w-screen mx-auto p-3 min-h-screen bg-gray-300">
+      <div className="max-w-2/3 bg-gray-100 flex flex-col gap-6">
+        <RiotIdSearchForm
+          name={name}
+          tag={tag}
+          handleSubmit={handleSubmit}
+          onNameChange={(e) => setName(e.target.value)}
+          onTagChange={(e) => setTag(e.target.value)}
         />
-      )}
 
-      {PuuidQuery.isLoading && <Loading message="Loading PUUID..." />}
-      {PuuidQuery.error && <ErrorMessage error={PuuidQuery.error} />}
-      {PuuidQuery.data && <p>PUUID: {puuid}</p>}
+        {summonerData && (
+          <SummonerProfile
+            summonerData={summonerData}
+            submittedName={submittedName}
+            submittedTag={submittedTag}
+            soloQueueStats={soloQueueStats}
+            flexQueueStats={flexQueueStats}
+            puuid={puuid}
+          />
+        )}
+        {PuuidQuery.isLoading && <Loading message="Loading PUUID..." />}
+        {PuuidQuery.error && <ErrorMessage error={PuuidQuery.error} />}
 
-      {summonerIsLoading && <Loading message="Loading Summoner..." />}
-      {summonerError && <p> Error:{(summonerError as Error).message}</p>}
+        {summonerIsLoading && <Loading message="Loading Summoner..." />}
+        {summonerError && <p> Error:{(summonerError as Error).message}</p>}
+      </div>
     </div>
   );
 }
