@@ -15,18 +15,23 @@ export default function Profile() {
 
   const [name, setName] = useState("");
   const [tag, setTag] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
       const { puuid } = await fetchPUUIDByRiotId(name, tag);
       if (puuid) {
         navigate(`/profile/${puuid}`);
       }
+      setError(null);
     } catch (err) {
       console.error("Error fetching PUUID", err);
+      setError("Could not find the name");
     }
+
     setName("");
     setTag("");
   };
@@ -63,12 +68,19 @@ export default function Profile() {
 
   return (
     <div className="p-6">
+      {error && <ErrorMessage error={error} />}
       <RiotIdSearchForm
         name={name}
         tag={tag}
         handleSubmit={handleSubmit}
-        onNameChange={(e) => setName(e.target.value)}
-        onTagChange={(e) => setTag(e.target.value)}
+        onNameChange={(e) => {
+          setName(e.target.value);
+          setError(null);
+        }}
+        onTagChange={(e) => {
+          setTag(e.target.value);
+          setError(null);
+        }}
       />
       <SummonerProfile
         summonerData={summonerData}
