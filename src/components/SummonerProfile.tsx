@@ -28,35 +28,49 @@ function SummonerProfile({
   puuid,
 }: SummonerProfileProps) {
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="rounded-md shadow-md p-6 flex flex-col gap-2 items-center">
       <img
+        className="rounded-full border-4 border-blue-500"
         src={`http://ddragon.leagueoflegends.com/cdn/15.13.1/img/profileicon/${summonerData.profileIconId}.png`}
         width={150}
         height={150}
       />
-      <p>
-        Riot ID: {submittedName}#{submittedTag}
-      </p>
-      <p>Summoner Level: {summonerData.summonerLevel}</p>
 
-      {soloQueueStats ? (
-        <p>
-          Solo/Duo: {soloQueueStats?.tier} {soloQueueStats?.rank}{" "}
-          {soloQueueStats?.leaguePoints} LP
+      <div className="text-center">
+        <p className="text-xl font-semibold">
+          Riot ID: {submittedName}#{submittedTag}
         </p>
-      ) : (
-        "Solo/Duo: UNRANKED"
-      )}
+        <p className="text-sm text-gray-600">
+          Summoner Level: {summonerData.summonerLevel}
+        </p>
+      </div>
 
-      {flexQueueStats ? (
-        <p>
-          Flex Queue: {flexQueueStats?.tier} {flexQueueStats?.rank}{" "}
-          {flexQueueStats?.leaguePoints} LP
-        </p>
-      ) : (
-        "Flex Queue: UNRANKED"
-      )}
-      {puuid && <p>PUUID: {puuid}</p>}
+      <div className="w-full bg-gray-50 rounded-xl p-4">
+        {soloQueueStats ? (
+          <p>
+            <span className="font-medium">Solo/Duo:</span>{" "}
+            {soloQueueStats?.tier} {soloQueueStats?.rank}{" "}
+            {soloQueueStats?.leaguePoints} LP
+          </p>
+        ) : (
+          <p>
+            <span className="font-medium">Solo/Duo:</span> UNRANKED
+          </p>
+        )}
+
+        {flexQueueStats ? (
+          <p>
+            <span className="font-medium">Flex Queue: </span>{" "}
+            {flexQueueStats?.tier} {flexQueueStats?.rank}{" "}
+            {flexQueueStats?.leaguePoints} LP
+          </p>
+        ) : (
+          <p>
+            <span className="font-medium">Flex Queue:</span> UNRANKED
+          </p>
+        )}
+        {puuid && <p>PUUID: {puuid}</p>}
+      </div>
     </div>
   );
 }
