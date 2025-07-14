@@ -1,53 +1,28 @@
 import { useState } from "react";
-import {
-  usePUUIDByRiotId,
-  useSummonerByPUUID,
-  useSummonerStatsByPUUID,
-} from "../hooks/queryHooks";
-import SummonerProfile from "../components/SummonerProfile";
+import { useNavigate } from "react-router-dom";
 import RiotIdSearchForm from "../components/RiotIdSearchForm";
-import Loading from "../components/Loading";
-import ErrorMessage from "../components/ErrorMessage";
+import { fetchPUUIDByRiotId } from "../api/riotApi";
 
 function Home() {
   const [name, setName] = useState("");
   const [tag, setTag] = useState("");
-  const [submittedName, setSubmittedName] = useState("");
-  const [submittedTag, setSubmittedTag] = useState("");
+  const navigate = useNavigate();
 
-  const PuuidQuery = usePUUIDByRiotId(submittedName, submittedTag);
-  const puuid = PuuidQuery.data?.puuid;
-
-  const {
-    data: summonerData,
-    error: summonerError,
-    isLoading: summonerIsLoading,
-  } = useSummonerByPUUID(puuid);
-
-  const {
-    data: summonerStats,
-    error: summonerStatsError,
-    isLoading: summonerStatsIsLoading,
-  } = useSummonerStatsByPUUID(puuid);
-
-  const soloQueueStats = summonerStats?.find(
-    (entry) => entry.queueType === "RANKED_SOLO_5x5"
-  );
-
-  const flexQueueStats = summonerStats?.find(
-    (entry) => entry.queueType === "RANKED_FLEX_SR"
-  );
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmittedName(name.trim());
-    setSubmittedTag(tag.trim());
+
+    try {
+      const { puuid } = await fetchPUUIDByRiotId(name, tag);
+      if (puuid) {
+        navigate(`/profile/${puuid}`);
+      }
+    } catch (err) {
+      console.error("Error fetching PUUID", err);
+    }
+
     setName("");
     setTag("");
   };
-
-  console.log(summonerStats);
-  console.log(summonerData);
 
   return (
     <div className="min-w-screen mx-auto p-3 min-h-screen bg-gray-300">
@@ -59,22 +34,6 @@ function Home() {
           onNameChange={(e) => setName(e.target.value)}
           onTagChange={(e) => setTag(e.target.value)}
         />
-
-        {summonerData && (
-          <SummonerProfile
-            summonerData={summonerData}
-            submittedName={submittedName}
-            submittedTag={submittedTag}
-            soloQueueStats={soloQueueStats}
-            flexQueueStats={flexQueueStats}
-            puuid={puuid}
-          />
-        )}
-        {PuuidQuery.isLoading && <Loading message="Loading PUUID..." />}
-        {PuuidQuery.error && <ErrorMessage error={PuuidQuery.error} />}
-
-        {summonerIsLoading && <Loading message="Loading Summoner..." />}
-        {summonerError && <p> Error:{(summonerError as Error).message}</p>}
       </div>
     </div>
   );
