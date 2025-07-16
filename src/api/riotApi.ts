@@ -54,3 +54,22 @@ export async function fetchSummonerStatsByPUUID(puuid: string) {
   }
   return res.json();
 }
+
+export async function fetchMatchIdsByPUUID(puuid: string, count = 10) {
+  const API_KEY = import.meta.env.VITE_RIOT_API_KEY;
+
+  const res = await fetch(
+    `https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=${count}`,
+    {
+      headers: {
+        "X-Riot-Token": API_KEY,
+      },
+    }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch match IDs");
+  }
+
+  return res.json();
+}
