@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   useSummonerByPUUID,
   useSummonerStatsByPUUID,
@@ -90,6 +90,8 @@ export default function Profile() {
         flexQueueStats={flexQueueStats}
         puuid={puuid!}
       />
+
+      <Link to={`/matches/${puuid}`}>Match History</Link>
     </div>
   );
 }

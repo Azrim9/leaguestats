@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import {
+  fetchMatchIdsByPUUID,
   fetchPUUIDByRiotId,
   fetchSummonerByPUUID,
   fetchSummonerStatsByPUUID,
@@ -25,6 +26,14 @@ export function useSummonerStatsByPUUID(puuid: string) {
   return useQuery({
     queryKey: ["summonerStatsByPUUID", puuid],
     queryFn: () => fetchSummonerStatsByPUUID(puuid),
+    enabled: Boolean(puuid),
+  });
+}
+
+export function useMatchIdsByPUUID(puuid: string, count = 10) {
+  return useQuery({
+    queryKey: ["matchIds", puuid, count],
+    queryFn: () => fetchMatchIdsByPUUID(puuid, count),
     enabled: Boolean(puuid),
   });
 }
